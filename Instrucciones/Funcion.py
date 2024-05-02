@@ -1,5 +1,6 @@
 from Errores.Errores import *
 from Abstract.Abstract import Expression
+from Reporte_Errores import reporterror
 
 class Funcion(Expression):
     def __init__(self, crear, nombre, igual, nueva, crear2, fila, columna):
@@ -24,7 +25,7 @@ class Funcion(Expression):
                         else:
                             return 'Error: falta la palabra reservada CrearBD()'
                     else:
-                        return 'Error: Falta la palabra reservada nueva'
+                        return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
@@ -39,7 +40,7 @@ class Funcion(Expression):
                         else:
                             return 'Error: falta la palabra reservada EliminarBD()'
                     else:
-                        return 'Error: Falta la palabra reservada elimina'
+                        return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
@@ -48,25 +49,40 @@ class Funcion(Expression):
         if self.crear == 'CrearColeccion':
             if self.nombre != None:
                 if self.igual == '=':
-                    if self.nueva == 'new':
-                        if self.crear2 == 'CrearColeccion("NombreColeccion")':
-                            if self.crear2.startswith('CrearColeccion("') and self.crear2.endswith('")'):
-                                nombre_coleccion = self.crear2[len('CrearColeccion("'):-2]
-                                return nombre_coleccion
-                            return 'db.createCollection(' + self.nombre + ');'
+                        if self.nueva == 'new':
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                            #Mandar a aalizar la cadena 
+                            #ver que diga CrearColeccion
+                            #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
 
-                            """print(self.crear2)
-                            palabra = ""
-                            for i in self.crear2:
-                                palabra +=i
-                                if palabra == 'CrearColeccion(':
-                                    print(self.crear2)
-                                    palabra=""
-                            '"""
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                            
+                                if caracter != '(':
+                                    cc += caracter
+                                    puntero += 1
+                                if caracter == '(':
+                                    'verificacmos para los errores '
+                                    if cc ==  "CrearColeccion":  
+                                        break
+                                    
+                                    else:
+                                        return '[ERROR ] FALTA LA PALABRA RESERVADA CrearColeccion'
+                                    break
+                            'extraemos el nombre de la colleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay teimpo'
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                            #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.createCollection(' + nombreColeccion + ');'
                         else:
-                            return 'Error: falta la palabra reservada CrearColeccion("NombreColeccion")'
-                    else:
-                        return 'Error: Falta la palabra reservada nueva'
+                            return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
@@ -76,12 +92,39 @@ class Funcion(Expression):
             if self.nombre != None:
                 if self.igual == '=':
                     if self.nueva == 'new':
-                        if self.crear2 == 'EliminarColeccion(“NombreColeccion”)':
-                            return 'db.' + self.nombre + '.drop();'
-                        else:
-                            return 'Error: falta la palabra reservada EliminarColeccion(“NombreColeccion”)'
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                                #Mandar a aalizar la cadena 
+                                #ver que diga CrearColeccion
+                                #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
+
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                                
+                                    if caracter != '(':
+                                        cc += caracter
+                                        puntero += 1
+                                    if caracter == '(':
+                                        'verificacmos para los errores '
+                                        if cc ==  "EliminarColeccion":  
+                                            break
+                                        
+                                        else:
+                                            return '[ERROR ] FALTA LA PALABRA RESERVADA EliminarColeccion'
+                                        break
+                            'extraemos el nombre de la coleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay teimpo'                                
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                                #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.' + nombreColeccion + '.drop();'
                     else:
-                        return 'Error: Falta la palabra reservada nueva'
+                        return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
@@ -91,12 +134,39 @@ class Funcion(Expression):
             if self.nombre != None:
                 if self.igual == '=':
                     if self.nueva == 'new':
-                        if self.crear2 == 'InsertarUnico(“NombreColeccion”)':
-                            return 'db.' + self.nombre + '.insertOne(ARCHIVOJSON);'
-                        else:
-                            return 'Error: falta la palabra reservada InsertarUnico(“NombreColeccion”)'
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                                #Mandar a aalizar la cadena 
+                                #ver que diga CrearColeccion
+                                #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
+
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                                
+                                    if caracter != '(':
+                                        cc += caracter
+                                        puntero += 1
+                                    if caracter == '(':
+                                        'verificacmos para los errores '
+                                        if cc ==  "InsertarUnico":  
+                                            break
+                                        
+                                        else:
+                                            return '[ERROR ] FALTA LA PALABRA RESERVADA InsertarUnico'
+                                        break
+                            'extraemos el nombre de la coleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay teimpo' 
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                                #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.'+ nombreColeccion +'.insertOne();'
                     else:
-                        return 'Error: Falta la palabra reservada nueva'
+                        return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
@@ -106,12 +176,39 @@ class Funcion(Expression):
             if self.nombre != None:
                 if self.igual == '=':
                     if self.nueva == 'new':
-                        if self.crear2 == 'ActualizarUnico(“NombreColeccion”)':
-                            return 'db.' + self.nombre + '.updateOne(ARCHIVOJSON);'
-                        else:
-                            return 'Error: falta la palabra reservada ActualizarUnico(“NombreColeccion”)'
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                                #Mandar a aalizar la cadena 
+                                #ver que diga CrearColeccion
+                                #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
+
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                                
+                                    if caracter != '(':
+                                        cc += caracter
+                                        puntero += 1
+                                    if caracter == '(':
+                                        'verificacmos para los errores '
+                                        if cc ==  "ActualizarUnico":  
+                                            break
+                                        
+                                        else:
+                                            return '[ERROR ] FALTA LA PALABRA RESERVADA ActualizarUnico'
+                                        break
+                            'extraemos el nombre de la coleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay teimpo' 
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                                #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.'+ nombreColeccion +'.updateOne();'
                     else:
-                        return 'Error: Falta la palabra reservada nueva'
+                        return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
@@ -121,10 +218,37 @@ class Funcion(Expression):
             if self.nombre != None:
                 if self.igual == '=':
                     if self.nueva == 'new':
-                        if self.crear2 == 'EliminarUnico(“NombreColeccion”)':
-                            return 'db.' + self.nombre + '.deleteOne(ARCHIVOJSON);'
-                        else:
-                            return 'Error: falta la palabra reservada EliminarUnico(“NombreColeccion”)'
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                                #Mandar a aalizar la cadena 
+                                #ver que diga CrearColeccion
+                                #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
+
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                                
+                                    if caracter != '(':
+                                        cc += caracter
+                                        puntero += 1
+                                    if caracter == '(':
+                                        'verificacmos para los errores '
+                                        if cc ==  "EliminarUnico":  
+                                            break
+                                        
+                                        else:
+                                            return '[ERROR ] FALTA LA PALABRA RESERVADA EliminarUnico'
+                                        break
+                            'extraemos el nombre de la coleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay tiempo' 
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                                #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.'+ nombreColeccion +'.deleteOne();'
                     else:
                         return 'Error: Falta la palabra reservada nueva'
                 else:
@@ -136,10 +260,37 @@ class Funcion(Expression):
             if self.nombre != None:
                 if self.igual == '=':
                     if self.nueva == 'new':
-                        if self.crear2 == 'BuscarTodo(“NombreColeccion”)':
-                            return 'db.' + self.nombre + '.find();'
-                        else:
-                            return 'Error: falta la palabra reservada BuscarTodo(“NombreColeccion”)'
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                                #Mandar a aalizar la cadena 
+                                #ver que diga CrearColeccion
+                                #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
+
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                                
+                                    if caracter != '(':
+                                        cc += caracter
+                                        puntero += 1
+                                    if caracter == '(':
+                                        'verificacmos para los errores '
+                                        if cc ==  "BuscarTodo":  
+                                            break
+                                        
+                                        else:
+                                            return '[ERROR ] FALTA LA PALABRA RESERVADA BuscarTodo'
+                                        break
+                            'extraemos el nombre de la coleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay tiempo' 
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                                #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.'+ nombreColeccion +'.find();'
                     else:
                         return 'Error: Falta la palabra reservada nueva'
                 else:
@@ -151,30 +302,47 @@ class Funcion(Expression):
             if self.nombre != None:
                 if self.igual == '=':
                     if self.nueva == 'new':
-                        if self.crear2 == 'BuscarUnico(“NombreColeccion”)':
-                            return 'db.' + self.nombre + '.findOne();'
-                        else:
-                            return 'Error: falta la palabra reservada BuscarUnico(“NombreColeccion”)'
+                            "=============== AQUI COMIENZA EL ANALISIS DEL NOMBRE DE LA COLECCION ======================"
+                                #Mandar a aalizar la cadena 
+                                #ver que diga CrearColeccion
+                                #CC VARIABLE PARA VERFICAR
+                            cc= ""
+                            verificarNombre = False
+
+                            nombreColeccion = ''
+                            puntero = 0
+                        #! leemos self.crear2 y separamaos para poder ver que coisida y so no error 
+                            for caracter in self.crear2:
+                                
+                                    if caracter != '(':
+                                        cc += caracter
+                                        puntero += 1
+                                    if caracter == '(':
+                                        'verificacmos para los errores '
+                                        if cc ==  "BuscarUnico":  
+                                            break
+                                        
+                                        else:
+                                            return '[ERROR ] FALTA LA PALABRA RESERVADA BuscarUnico'
+                                        break
+                            'extraemos el nombre de la coleccion'
+                            nombreColeccion = self.crear2[puntero:]
+                            'se tendria que verificar el orden y que tenga  los () pero no hay tiempo' 
+                            'se quitan ()'
+                            nombreColeccion = nombreColeccion.replace('(','')
+                            nombreColeccion = nombreColeccion.replace(')','')
+                                #nombreColeccion = nombreColeccion.replace('\"','')
+                            return'db.'+ nombreColeccion +'.findOne();'
                     else:
-                        return 'Error: Falta la palabra reservada nueva'
+                        return 'Error: Falta la palabra reservada new'
                 else:
                     return 'Error: Falta el simbolo ='
             else:
                 return 'Error: Falta el nombre de la funcion'
-        
-
-        
             
         else:
-            return Errores(self.crear,"Sintactico", self.getFila(), self.getColumna())
-        
-
-
-       
-        
-        
-
-        
+             errores =Errores(self.crear,"Sintactico", self.getFila(), self.getColumna())
+             return errores
 
 
     def getFila(self):
@@ -183,5 +351,9 @@ class Funcion(Expression):
     def getColumna(self):
         return super().getColumna()
     
+    def Errores_Sintacticos(self):
+        error = Errores()
+        print(error)
+
     def getPeueba(self):
         return super().getPeueba()

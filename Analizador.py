@@ -1,6 +1,7 @@
 from Instrucciones.Funcion import *
 from Errores.Errores import *
 from Abstract.Lexema import *
+from Reporte_Errores import reporterror
 
 global n_linea
 global n_columna
@@ -21,6 +22,7 @@ def instruccion(cadena):
     global lista_lexemas
     lexema = ''
     puntero = 0
+    cadena = cadena + "/n"
 
 
     while cadena:
@@ -29,10 +31,10 @@ def instruccion(cadena):
 
         if char.isupper() or char.islower():       #! leemos nuestra cadena y al encontrar " que habre empieza a crear el token
             lexema, cadena = armar_lexema(cadena)
-            print("+++++++++++++++++")
+            """print("+++++++++++++++++")
             print(lexema)
             print(cadena)
-            print("+++++++++++++++++")
+            print("+++++++++++++++++")"""
 
             if lexema and cadena:
                 n_columna += 1
@@ -190,7 +192,7 @@ def operar_():
 
     return instrucciones
 
-def getErrores():
+def getErrores(self):
     global lista_errores
     return lista_errores
 
@@ -201,16 +203,14 @@ def Analizar(Data):
     instrucciones = instruccion(Data)
     global lista_lexemas
     n = 0
-    for l in lista_lexemas:
+    """for l in lista_lexemas:
         print(n+1)
-        print(l)
- 
+        print(l)"""
     resultado_instrucciones = operar_()
-
-    print(lista_lexemas)
-    print("///////////////////////////////////////////////////////////////////////////////////////////")
-    print(lista_errores)
-    print("****************************************************************")
+    resultados = []
     for respuesta in resultado_instrucciones:
-   
-        print("ESta es la respuesta  "+ respuesta.ejecutarT())
+        resultados.append(respuesta.ejecutarT())
+    resultados_concatenados = '\n'.join(map(str, resultados))
+
+    return resultados_concatenados
+        

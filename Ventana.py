@@ -1,9 +1,9 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import scrolledtext,filedialog, messagebox
-from Analizador import Analizar
+from Analizador import Analizar, getErrores
 from Analizador_Lexico import Analizador_lexico
-
+from Instrucciones.Funcion import Funcion 
 class Ventana:
     Data = ""
 
@@ -41,10 +41,10 @@ class Ventana:
         self.menu_analisis.add_command(label="Analizar", command= self.ventana_traduccion)
 
         self.menu_token = tk.Menu(self.menu_barra, tearoff=0)
-        self.menu_token.add_command(label="Reporte Tokens", command= self.Reportando)
+        self.menu_token.add_command(label="Reporte Tokens", command= self.Reportando_Token)
 
         self.menu_errores = tk.Menu(self.menu_barra, tearoff=0)
-        self.menu_errores.add_command(label="Reporte Errores")
+        self.menu_errores.add_command(label="Reporte Errores", command= self.Reportando_Errores)
 
 
         self.menu_barra.add_cascade(label="Archivo", menu= self.menu_archivo)
@@ -66,14 +66,27 @@ class Ventana:
         ventana.resizable(0,0)
 
         # Crear el editor de texto
-        texto_editor = tk.Text(ventana, height=25, width=80)
-        texto_editor.pack(pady=10)
+        texto_editor2 = tk.Text(ventana, height=25, width=80)
+        texto_editor2.pack(pady=10)
+
     #   Metodo Analizador
         global Data
         analizador = Analizar(Data)
 
+        texto_editor2.config(state= "normal")
+        texto_editor2.delete(1.0, tk.END)
+        texto_editor2.insert(tk.END, analizador)
+        texto_editor2.tag_configure("green", foreground="blue")
+        texto_editor2.tag_add("green", "1.0", "end")
+        texto_editor2.config(state='disabled')
+
         # Ejecutar el bucle de eventos
         ventana.mainloop()
+
+
+    def mostrar_archivo(self, result ):
+       
+        pass
 
 
     def abrir_archivo(self):
@@ -91,7 +104,7 @@ class Ventana:
                 print("===================================================")
                 print(Data)
     
-    def Reportando(self):
+    def Reportando_Token(self):
         global Data
 
         Data = self.texto_editor.get("1.0","end-1c")
@@ -99,6 +112,15 @@ class Ventana:
         lexema.analizador(Data)
 
         lexema.ErrorToken()
+
+
+    def Reportando_Errores(self):
+        global Data
+        Data = self.texto_editor.get("1.0", "end-1c")
+        lexema = Analizador_lexico()
+        lexema.analizador(Data)
+        lexema.ErrorReporte()
+        
 
     def limpiar_texto(self):
         self.texto_editor.delete(1.0, tk.END)

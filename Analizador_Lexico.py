@@ -1,6 +1,7 @@
 from Token import Token
 from Errores.Errores import *
 from Reporte_Token import reportoken
+from Reporte_Errores import reporterror
 import re
 
 
@@ -67,9 +68,9 @@ class Analizador_lexico:
                     self.listTokens.append(token)
                     self.elementos[Titulo] = self.argsDeElementos
                     self.argsDeElementos = {}
-                    print("=================Elemento ==================")
-                    print(self.elementos)
-                    print("================= ==================")
+                    #print("=================Elemento ==================")
+                    #print(self.elementos)
+                    #print("================= ==================")
                   
                     Titulo =""
                     buffer = ""
@@ -111,6 +112,22 @@ class Analizador_lexico:
                     columna +=1
                     buffer += caracter
                     token = Token("GUION", buffer, linea, columna)
+                    self.listTokens.append(token)
+                    buffer = ""
+                    estado = 0
+
+                elif caracter == "*":
+                    columna +=1
+                    buffer += caracter
+                    token = Token("ASTERISCO", buffer, linea, columna)
+                    self.listTokens.append(token)
+                    buffer = ""
+                    estado = 0
+                
+                elif caracter == "'":
+                    columna +=1
+                    buffer += caracter
+                    token = Token("COMILLA SIMPLE", buffer, linea, columna)
                     self.listTokens.append(token)
                     buffer = ""
                     estado = 0
@@ -166,6 +183,22 @@ class Analizador_lexico:
                     columna +=1
                     buffer += caracter
                     token = Token("CORCHETE CIERRA", buffer, linea, columna)
+                    self.listTokens.append(token)
+                    buffer = ""
+                    estado = 0
+                
+                elif caracter == "(":
+                    columna +=1
+                    buffer += caracter
+                    token = Token("PARENTESIS ABRE", buffer, linea, columna)
+                    self.listTokens.append(token)
+                    buffer = ""
+                    estado = 0
+
+                elif caracter == ")":
+                    columna +=1
+                    buffer += caracter
+                    token = Token("PARENTESIS CIERRA", buffer, linea, columna)
                     self.listTokens.append(token)
                     buffer = ""
                     estado = 0
@@ -337,6 +370,9 @@ class Analizador_lexico:
     
     def ErrorToken(self):
         reportoken(self.listTokens)
+
+    def ErrorReporte(self):
+        reporterror(self.listError)
     
 
 
